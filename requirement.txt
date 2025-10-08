@@ -1,5 +1,4 @@
 streamlit
-bcrypt
 PyPDF2
 faiss-cpu
 langchain
@@ -10,3 +9,6 @@ sentence-transformers
 python-dotenv
 gTTS
 moviepy
+bcrypt==5.0.0
+cffi
+cryptography
