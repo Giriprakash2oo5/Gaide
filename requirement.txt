@@ -1,5 +1,5 @@
 streamlit
-bcrypt 5.0.0
+bcrypt==5.0.0
 PyPDF2
 faiss-cpu
 langchain
