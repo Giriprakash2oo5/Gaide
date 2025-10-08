@@ -1,6 +1,6 @@
 # login_module.py
 import sqlite3
-import bcrypt
+from passlib.hash import bcrypt
 import streamlit as st
 
 DB_PATH = "users.db"
@@ -24,11 +24,12 @@ def init_user_db():
 
 # ---------- Password Utils ----------
 def hash_password(password: str) -> bytes:
-    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+    return bcrypt.hash(password)
 
 def check_password(password: str, hashed: bytes) -> bool:
     try:
-        return bcrypt.checkpw(password.encode("utf-8"), hashed)
+        return bcrypt.verify(password, hashed)
+
     except Exception:
         return False
 

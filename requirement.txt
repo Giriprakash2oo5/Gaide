@@ -12,3 +12,4 @@ moviepy
 bcrypt==5.0.0
 cffi
 cryptography
+passlib==1.7.4
