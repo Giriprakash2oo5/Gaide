@@ -1,3 +1,5 @@
+import time
+starttime=time.time()
 import streamlit as st
 from login_module import init_user_db, user_portal
 from embeddings_utils import get_subjects, load_subject_vector_store
@@ -57,12 +59,14 @@ with tab1:
                     import re
                     def highlight_text(text):
                         text = re.sub(r'^(#+\s*.*)', r'<span style="color:red; font-weight:bold;">\1</span>', text, flags=re.MULTILINE)
-                        text = re.sub(r'(\$.*?\$)', r'<span style="color:red;">\1</span>', text)
+                        text = re.sub(r'\$(.*?)\$', r'<span style="color:red;">\1</span>', text)
+                       
                         return text
 
                     styled_resp = highlight_text(resp)
                     st.markdown("### 📖 Explanation:")
                     st.markdown(styled_resp, unsafe_allow_html=True)
+                    
 
                 elif mode == "Quiz":
                     if st.button("Generate Quiz") and prompt:
@@ -149,3 +153,6 @@ with tab3:
             gamification_page(sub, vector_store)
     else:
         st.warning("⚠️ Please login as Class 12 student to access gamification.")
+        
+endtime=time.time()
+print=endtime-starttime
