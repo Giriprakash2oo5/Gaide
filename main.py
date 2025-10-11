@@ -1,6 +1,9 @@
 import sys
-import pysqlite3
-sys.modules['sqlite3'] = pysqlite3
+try:
+    import pysqlite3
+    sys.modules['sqlite3'] = pysqlite3
+except ImportError:
+    pass  # Use system sqlite3 if pysqlite3 not available
 
 import streamlit as st
 from login_module import init_user_db, user_portal
