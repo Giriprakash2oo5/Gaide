@@ -159,5 +159,3 @@ with tab3:
     else:
         st.warning("⚠️ Please login as Class 12 student to access gamification.")
         
-endtime=time.time()
-print=endtime-starttime
