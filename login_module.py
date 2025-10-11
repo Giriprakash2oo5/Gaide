@@ -1,6 +1,6 @@
 # login_module.py
 import sqlite3
-from passlib.hash import bcrypt
+import hashlib
 import streamlit as st
 
 DB_PATH = "users.db"
@@ -14,7 +14,7 @@ def init_user_db():
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE,
-            password BLOB,
+            password TEXT,
             class TEXT
         )
         """
@@ -23,13 +23,14 @@ def init_user_db():
     conn.close()
 
 # ---------- Password Utils ----------
-def hash_password(password: str) -> bytes:
-    return bcrypt.hash(password)
+def hash_password(password: str) -> str:
+    """Hash password using SHA-256"""
+    return hashlib.sha256(password.encode()).hexdigest()
 
-def check_password(password: str, hashed: bytes) -> bool:
+def check_password(password: str, hashed: str) -> bool:
+    """Verify password against hash"""
     try:
-        return bcrypt.verify(password, hashed)
-
+        return hashlib.sha256(password.encode()).hexdigest() == hashed
     except Exception:
         return False
 
@@ -89,5 +90,6 @@ def user_portal():
                 st.session_state["username"] = username
                 st.session_state["class"] = user_class
                 st.success(f"✅ Welcome {username}! You are in Class {user_class}.")
+                st.rerun()
             else:
                 st.error("❌ Invalid username or password.")
