@@ -10,7 +10,5 @@ sentence-transformers
 python-dotenv
 gTTS
 moviepy
-bcrypt==5.0.0
-cffi
-cryptography
-passlib==1.7.4
+chromadb
+pysqlite3-binary

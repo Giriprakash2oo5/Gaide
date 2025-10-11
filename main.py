@@ -1,5 +1,7 @@
-import time
-starttime=time.time()
+import sys
+import pysqlite3
+sys.modules['sqlite3'] = pysqlite3
+
 import streamlit as st
 from login_module import init_user_db, user_portal
 from embeddings_utils import get_subjects, load_subject_vector_store
