@@ -1,16 +1,10 @@
-# embedding_utils.py
+# embeddings_utils.py
 # For loading vector stores and embedding user queries during retrieval using Sentence Transformers
 
 import os
 import streamlit as st
-from langchain_chroma import Chroma
-from sentence_transformers import SentenceTransformer
-
-# -----------------------------
-# Load Sentence Transformers Model
-# -----------------------------
-EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"  # Use same model as vector store!
-embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
+from langchain_community.vectorstores import Chroma
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 # -----------------------------
 # Directories
@@ -19,23 +13,25 @@ SUBJECTS_DIR = "subjects"
 VECTOR_STORE_DIR = "vector_stores"
 
 # -----------------------------
-# Embedding Wrapper for Query Embedding
+# Initialize embeddings
 # -----------------------------
-class HFEmbeddings:
-    def __init__(self):
-        # Model already loaded globally
-        pass
-    
-    def embed_query(self, text):
-        """Embed a single query text"""
-        # SentenceTransformer expects a list, returns a numpy array
-        return embedding_model.encode([text])[0].tolist()
+EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+
+def get_embeddings():
+    """Get HuggingFace embeddings model"""
+    return HuggingFaceEmbeddings(
+        model_name=EMBEDDING_MODEL_NAME,
+        model_kwargs={'device': 'cpu'},
+        encode_kwargs={'normalize_embeddings': True}
+    )
 
 # -----------------------------
 # Utility Functions
 # -----------------------------
 def get_subjects():
+    """Get list of available subjects"""
     if not os.path.exists(SUBJECTS_DIR):
+        os.makedirs(SUBJECTS_DIR)
         return []
     return [f for f in os.listdir(SUBJECTS_DIR) if os.path.isdir(os.path.join(SUBJECTS_DIR, f))]
 
@@ -48,10 +44,14 @@ def load_subject_vector_store(subject):
             f"❌ Vector store not found for subject '{subject}'. "
             "Run build_vector_stores.py first."
         )
+    
+    embeddings = get_embeddings()
+    
     return Chroma(
         persist_directory=persist_path,
-        embedding_function=HFEmbeddings()
+        embedding_function=embeddings
     )
+
 
 def search_subject(subject, query, k=5):
     """Search for relevant documents in a subject"""
