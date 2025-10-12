@@ -20,13 +20,16 @@ EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 import torch
 from langchain_community.embeddings.huggingface import HuggingFaceEmbeddings
 
+import torch
+
 def get_embeddings():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     return HuggingFaceEmbeddings(
         model_name=EMBEDDING_MODEL_NAME,
-        model_kwargs={"device": device},  # Use detected device here
+        model_kwargs={"device": device, "torch_dtype": torch.float32},
         encode_kwargs={"normalize_embeddings": True},
     )
+
 
 
 # -----------------------------
