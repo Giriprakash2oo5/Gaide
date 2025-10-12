@@ -7,6 +7,7 @@ from pathlib import Path
 from langchain_chroma import Chroma
 from langchain.docstore.document import Document
 from sentence_transformers import SentenceTransformer
+import torch
 
 # Directories
 VECTOR_STORE_DIR = Path("vector_stores")

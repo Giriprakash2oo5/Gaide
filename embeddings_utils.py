@@ -17,13 +17,17 @@ VECTOR_STORE_DIR = "vector_stores"
 # -----------------------------
 EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
+import torch
+from langchain_community.embeddings.huggingface import HuggingFaceEmbeddings
+
 def get_embeddings():
-    """Get HuggingFace embeddings model"""
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     return HuggingFaceEmbeddings(
         model_name=EMBEDDING_MODEL_NAME,
-        model_kwargs={'device': 'cpu'},
-        encode_kwargs={'normalize_embeddings': True}
+        model_kwargs={"device": device},  # Use detected device here
+        encode_kwargs={"normalize_embeddings": True},
     )
+
 
 # -----------------------------
 # Utility Functions
