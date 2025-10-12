@@ -9,7 +9,7 @@ sentence-transformers
 huggingface-hub
 python-dotenv
 gTTS
-moviepy
+moviepy==2.0.0.dev2
 chromadb==1.1.0
 passlib==1.7.4
 bcrypt==5.0.0
