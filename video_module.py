@@ -2,40 +2,44 @@ import os
 from moviepy.editor import TextClip, CompositeVideoClip, AudioFileClip
 from moviepy.editor import concatenate_videoclips
 from gtts import gTTS  # For text-to-speech
+import tempfile
 
-def synthesize_video_from_text(prompt, out_path="output_explanation_video.mp4"):
-    """
-    Generate a simple educational video using moviepy + gTTS.
-    """
+with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
+    audio_path = f.name
+
+
+def synthesize_video_from_text(prompt):
     try:
-        # Step 1: Convert text to speech
+        # Use temp file for audio
+        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
+            audio_path = f.name
+
         tts = gTTS(prompt, lang='en')
-        audio_path = "temp_audio.mp3"
         tts.save(audio_path)
 
-        # Step 2: Create text overlay video
-        txt_clip = TextClip(prompt, fontsize=40, color='white', size=(1280, 720),
+        # Create text clip
+        txt_clip = TextClip(prompt, fontsize=30, color='white', size=(720, 480),
                             bg_color='black', method='caption', align='center')
 
-        # Duration matches audio
         audio_clip = AudioFileClip(audio_path)
         txt_clip = txt_clip.set_duration(audio_clip.duration)
         txt_clip = txt_clip.set_audio(audio_clip)
 
-        # Step 3: Export final video
+        # Save video in temp file
+        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as f:
+            out_path = f.name
+
         txt_clip.write_videofile(out_path, fps=24, codec='libx264', audio_codec='aac')
 
         # Clean up temp audio
-        if os.path.exists(audio_path):
-            os.remove(audio_path)
+        os.remove(audio_path)
 
         return out_path
 
     except Exception as e:
         print("❌ Video generation failed:", e)
         return None
-
-
+    
 def generate_video_from_text(text_prompt):
     """
     High-level function: takes explanation text and outputs a video file path.
@@ -52,3 +56,4 @@ def generate_video_from_text(text_prompt):
 
     except Exception as e:
         return None, str(e)
+    
