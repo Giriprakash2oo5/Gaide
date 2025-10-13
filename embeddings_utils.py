@@ -30,12 +30,6 @@ def get_embeddings():
     )
 
 
-
-
-
-# -----------------------------
-# Utility Functions
-# -----------------------------
 def get_subjects():
     """Get list of available subjects"""
     if not os.path.exists(SUBJECTS_DIR):

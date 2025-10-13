@@ -12,7 +12,6 @@ import torch
 # Directories
 VECTOR_STORE_DIR = Path("vector_stores")
 SUBJECTS_DIR = Path("subjects")
-
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"  # Make sure same everywhere!
 
 # --------------------------
