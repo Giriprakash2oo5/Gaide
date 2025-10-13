@@ -4,7 +4,9 @@
 import os
 import streamlit as st
 from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings.huggingface import HuggingFaceEmbeddings
+import torch
+
 
 # -----------------------------
 # Directories
@@ -17,18 +19,17 @@ VECTOR_STORE_DIR = "vector_stores"
 # -----------------------------
 EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
-import torch
-from langchain_community.embeddings.huggingface import HuggingFaceEmbeddings
 
-import torch
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 def get_embeddings():
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
     return HuggingFaceEmbeddings(
-        model_name=EMBEDDING_MODEL_NAME,
-        model_kwargs={"device": device, "torch_dtype": torch.float32},
-        encode_kwargs={"normalize_embeddings": True},
+        model_name=model_name,
+        model_kwargs={'device': 'cpu'}  # Force safe load
     )
+
+
 
 
 
