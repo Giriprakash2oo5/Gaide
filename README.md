@@ -2,7 +2,7 @@
 
  This platform is the new way to make the students understand the topics trough the explanation and video based on the context that given by the books,Quiz is also conducted based on the explanation given.
  It was done with the use of RAG(Retrieval-Augmented Generation),Gemini is used as LLM and chromaDb is a vector databased used to store the embeddings. 
- # You can access the app through:[Link Text][(https://example.com](https://giriprakash2oo5-gaide-main-r4pwgc.streamlit.app/Login)
+ # You can access the app through:[Link Text](https://giriprakash2oo5-gaide-main-r4pwgc.streamlit.app/Login)
  # Requirements:
  Langchain 
  Google API key
@@ -21,5 +21,6 @@
 
 
  
+
 
 
