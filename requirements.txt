@@ -4,7 +4,6 @@ langchain==0.3.27
 langchain-core==0.3.79
 langchain-community==0.3.29
 langchain-chroma==0.2.6
-langchain-groq==0.3.7
 sentence-transformers
 huggingface-hub
 python-dotenv

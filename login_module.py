@@ -4,7 +4,7 @@ import hashlib
 import streamlit as st
 
 DB_PATH = "users.db"
-
+    
 # ---------- DB Setup ----------
 def init_user_db():
     conn = sqlite3.connect(DB_PATH)

@@ -8,9 +8,9 @@ class FeedbackAgent:
         answers_str = "\n".join([f"Q{idx+1}: {ans}" for idx, ans in enumerate(user_answers)])
         prompt = f"""
 Given the quiz and user answers, provide:
-- A short positive summary (use 1-2 gentle emojis).
+- A short positive summary (use 2-4 gentle emojis).
 - Strengths and weaknesses in max 3 sentences.
-
+- If the score is less than 50% then suggest the student to study the concepts again.
 Quiz:
 {quiz_text}
 
@@ -43,7 +43,7 @@ Here is the performance history for student: {user}, subject: {subject}:
 
 Please give comparative feedback:
 - Mention which lessons they are doing better in compared to others.
-- Highlight areas where they are weaker.
+- Highlight areas where they are weaker and suggest to study the concepts again.
 - Encourage improvement with supportive language.
 - Keep it short (3-4 sentences).
 """

@@ -98,10 +98,10 @@ with tab1:
 # Explanation & Video Tab
 # ----------------------------
 with tab2:
-    st.header("🎥 Generate Explanation Video")
-    user_question = st.text_input("Ask a question to generate explanation video:")
+    st.header("🎥 Explanation with Video")
+    user_question = st.text_input("Ask your doubts?")
 
-    if st.button("Generate Video") and user_question:
+    if st.button("Submit") and user_question:
         vector_store = load_subject_vector_store(subject)  # Ensure subject is selected
         llm = GeminiLLM()
         from agents.explanation_agent import ExplanationAgent
