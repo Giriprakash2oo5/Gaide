@@ -10,7 +10,7 @@ import streamlit as st
 from login_module import init_user_db
 from embeddings_utils import get_subjects, load_subject_vector_store
 from llm_utils import GeminiLLM
-from video_module import generate_video_from_text
+from agents.video_module import generate_video_from_text
 from agents.quiz_agent import QuizAgent, parse_quiz
 from agents.feedback_agent import FeedbackAgent
 from gamification_module import gamification_page  # ✅ Gamification module
