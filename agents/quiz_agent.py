@@ -31,7 +31,6 @@ Rules:
 EXPLANATION:
 {explanation}
 """
-        # Use the correct LLM method to get text
         return self.llm.invoke([HumanMessage(content=prompt)])
 
     def generate_quiz_from_lesson_text(self, lesson_text):
@@ -59,7 +58,6 @@ Rules:
 LESSON CONTENT:
 {lesson_text}
 """
-        # Use the correct LLM method to get text
         return self.llm.invoke([HumanMessage(content=prompt)])
 
 
@@ -68,7 +66,6 @@ def parse_quiz(quiz_text):
     if not quiz_text or not isinstance(quiz_text, str):
         return []
 
-    # Clean up common LLM output artifacts
     quiz_text = quiz_text.strip()
     if quiz_text.startswith("```json"):
         quiz_text = quiz_text[7:]
@@ -78,7 +75,6 @@ def parse_quiz(quiz_text):
         quiz_text = quiz_text[:-3]
     quiz_text = quiz_text.strip()
 
-    # Try JSON parse first
     try:
         questions = json.loads(quiz_text)
         parsed = []
@@ -94,7 +90,6 @@ def parse_quiz(quiz_text):
     except Exception:
         pass
 
-    # Fallback parser for non-JSON output
     questions = []
     raw_questions = re.split(r'\bQ\d+\s*[:\.]\s*', quiz_text, flags=re.IGNORECASE)[1:]
     if not raw_questions:

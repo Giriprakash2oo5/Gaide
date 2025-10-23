@@ -12,13 +12,11 @@ def gamification_page(subject, vector_store):
     - Display lesson cards with progress.
     - Embed quiz per lesson.
     """
-    # Initialize LLM and agents
     llm = GeminiLLM()
     expl_agent = ExplanationAgent(llm)
     quiz_agent = QuizAgent(llm)
     feedback_agent = FeedbackAgent(llm)
 
-    # Sample lessons for demo (replace with actual lesson titles from your index)
     lessons = [
         "Ulysses",
         "Prose 1",
@@ -27,7 +25,6 @@ def gamification_page(subject, vector_store):
         "Poem 2"
     ]
 
-    # Initialize gamification state
     if "gamification_state" not in st.session_state:
         st.session_state.gamification_state = {lesson: {"completed": False, "score": 0} for lesson in lessons}
 
@@ -35,7 +32,6 @@ def gamification_page(subject, vector_store):
     completed_lessons = sum(1 for l in st.session_state.gamification_state.values() if l["completed"])
     st.progress(completed_lessons / len(lessons))
 
-    # Display lesson cards
     col1, col2, col3 = st.columns(3)
     for idx, lesson in enumerate(lessons):
         state = st.session_state.gamification_state[lesson]
@@ -48,12 +44,10 @@ def gamification_page(subject, vector_store):
             docs = vector_store.similarity_search(lesson, k=5)
             context = "\n".join([d.page_content for d in docs])
 
-            # Show lesson explanation
             st.markdown("#### 📖 Explanation")
             explanation = expl_agent.explain(context, lesson)
             st.write(explanation)
 
-            # Generate Quiz
             st.markdown("#### 🧠 Quiz")
             questions = parse_quiz(quiz_agent.generate_quiz_from_lesson_text(context))
             user_answers = []
@@ -66,13 +60,11 @@ def gamification_page(subject, vector_store):
                 total = len(questions)
                 st.success(f"Score: {score}/{total}")
 
-                # Feedback
                 quiz_text = "\n".join([f"Q{i+1}: {q['q']} | Correct: {q.get('correct')}" for i, q in enumerate(questions)])
                 feedback = feedback_agent.generate_feedback(quiz_text, user_answers)
                 st.markdown("### 💬 Feedback:")
                 st.write(feedback)
 
-                # Mark lesson as completed if >=90%
                 if score / total >= 0.9:
                     st.session_state.gamification_state[lesson]["completed"] = True
                     st.session_state.gamification_state[lesson]["score"] = score

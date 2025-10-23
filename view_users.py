@@ -1,11 +1,11 @@
 import sqlite3
 
 # Connect to the database
-conn = sqlite3.connect("users.db")
+conn = sqlite3.connect("learner_tracking.db")
 cursor = conn.cursor()
 
 # Fetch all users
-cursor.execute("SELECT * FROM users")
+cursor.execute("SELECT * FROM performance")
 rows = cursor.fetchall()
 
 # Print column names

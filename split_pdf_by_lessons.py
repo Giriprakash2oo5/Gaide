@@ -1,4 +1,3 @@
-# split_pdf_by_lessons.py
 from PyPDF2 import PdfReader, PdfWriter
 import os
 

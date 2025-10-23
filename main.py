@@ -3,7 +3,7 @@ try:
     import pysqlite3
     sys.modules['sqlite3'] = pysqlite3
 except ImportError:
-    pass  # Use system sqlite3 if pysqlite3 not available
+    pass 
 
 import os
 import streamlit as st
@@ -29,14 +29,8 @@ st.title("🎓 GAIDE Learning Platform", anchor=None)
 
 init_user_db()
 
-# ----------------------------
-# Tabs
-# ----------------------------
 tab1, tab2 = st.tabs(["Quiz", "Explanation & Video"])
 
-# ----------------------------
-# Quiz Tab (Only)
-# ----------------------------
 with tab1:
     if not st.session_state.get("logged_in"):
         st.warning("⚠️ Please login first in the sidebar.")
@@ -94,15 +88,12 @@ with tab1:
 
                 st.markdown('</div>', unsafe_allow_html=True)
 
-# ----------------------------
-# Explanation & Video Tab
-# ----------------------------
 with tab2:
     st.header("🎥 Explanation with Video")
     user_question = st.text_input("Ask your doubts?")
 
     if st.button("Submit") and user_question:
-        vector_store = load_subject_vector_store(subject)  # Ensure subject is selected
+        vector_store = load_subject_vector_store(subject)  
         llm = GeminiLLM()
         from agents.explanation_agent import ExplanationAgent
         explanation_agent = ExplanationAgent(llm)
@@ -120,7 +111,6 @@ with tab2:
         st.markdown("### 📖 Explanation:")
         st.write(display_text or "")
 
-        # Generate video
         with st.spinner("🎬 Generating video from explanation..."):
             video_url, error = generate_video_from_text(display_text or "")
             if error:

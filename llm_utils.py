@@ -1,5 +1,3 @@
-# llm_utils.py
-
 import os
 import google.generativeai as genai
 
@@ -7,10 +5,9 @@ class GeminiLLM:
     def __init__(self, model_name: str = "models/gemini-2.5-flash"):
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
-            raise ValueError("❌ GEMINI_API_KEY environment variable not set. Please set it before running the app.")
+            raise ValueError("❌ GEMINI_API_KEY environment variable not set.")
         genai.configure(api_key=api_key)
 
-        # Correct way to load Gemini model
         self.model = genai.GenerativeModel(model_name)
 
     def query(self, prompt: str, vector_store=None, k: int = 3):
@@ -37,13 +34,11 @@ Question: {prompt}
 Answer in detail with explanations that are suitable for a student.
 """
 
-        # Generate response
         try:
             response = self.model.generate_content(full_prompt)
             return getattr(response, "text", str(response))
         except Exception as e:
             return f"❌ Gemini API Error: {str(e)}"
 
-    # For compatibility with agents expecting `.invoke(prompt)`
     def invoke(self, prompt: str):
         return self.query(prompt)

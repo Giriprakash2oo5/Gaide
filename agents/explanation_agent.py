@@ -1,11 +1,10 @@
-
 class ExplanationAgent:
     def __init__(self, llm):
         self.llm = llm
 
     def explain(self, context, question):
         prompt = f"""
--Answer the question based on the PDF with additional .
+-Answer the question based on the PDF and don't give any additional answers.
 -If there is a image attached to the explanation then you must generate the image exactly given in the context.
 
 If not found, give some definition and say:

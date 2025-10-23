@@ -1,11 +1,9 @@
-# extract_index_pages.py
 import pytesseract
 from pdf2image import convert_from_path
 import cv2
 import re
 import os
 
-# 🧠 If tesseract is not in PATH, set it manually (Windows default below)
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 pdf_path="C:\\Users\\LENOVO\\OneDrive\\Documents\\gAide\\Gaide_learning_platform\\subjects\\Chemistry"
 def extract_index_from_pdf(pdf_path):
@@ -16,7 +14,6 @@ def extract_index_from_pdf(pdf_path):
         text = pytesseract.image_to_string(page)
         all_text += "\n" + text
 
-    # Example pattern: "1 Metallurgy 01 June" → ("Metallurgy", 1)
     pattern = re.compile(r'\d+\s+([A-Za-z\s\-&]+)\s+(\d+)')
     lessons = []
     for match in pattern.findall(all_text):
@@ -29,7 +26,6 @@ def extract_index_from_pdf(pdf_path):
     for title, page in lessons:
         print(f" - {title} → Page {page}")
 
-    # Save as a reference file
     with open("lesson_index.txt", "w", encoding="utf-8") as f:
         for title, page in lessons:
             f.write(f"{title}|{page}\n")

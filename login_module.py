@@ -1,11 +1,9 @@
-# login_module.py
 import sqlite3
 import hashlib
 import streamlit as st
 
 DB_PATH = "users.db"
     
-# ---------- DB Setup ----------
 def init_user_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -22,7 +20,6 @@ def init_user_db():
     conn.commit()
     conn.close()
 
-# ---------- Password Utils ----------
 def hash_password(password: str) -> str:
     """Hash password using SHA-256"""
     return hashlib.sha256(password.encode()).hexdigest()
@@ -34,7 +31,6 @@ def check_password(password: str, hashed: str) -> bool:
     except Exception:
         return False
 
-# ---------- DB Functions ----------
 def register_user(username: str, password: str, user_class: str) -> bool:
     if not username or not password:
         return False
@@ -63,7 +59,6 @@ def login_user(username: str, password: str):
         return True, row[1]
     return False, None
 
-# ---------- UI ----------
 def user_portal():
     st.sidebar.title("🔑 User Portal")
     option = st.sidebar.radio("Choose Action", ["Login", "Register"])

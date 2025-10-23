@@ -1,6 +1,3 @@
-# build_vector_stores.py
-# For creating and storing document embeddings in Chroma using HuggingFace Sentence Transformers
-
 import os
 import PyPDF2
 from pathlib import Path
@@ -12,11 +9,8 @@ import torch
 # Directories
 VECTOR_STORE_DIR = Path("vector_stores")
 SUBJECTS_DIR = Path("subjects")
-EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"  # Make sure same everywhere!
+EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"  
 
-# --------------------------
-# CHANGED PORTION: Embeddings class
-# --------------------------
 class HFEmbeddings:
     def __init__(self, model):
         self.model = model
@@ -27,9 +21,6 @@ class HFEmbeddings:
     def embed_query(self, text):
         return self.model.encode([text])[0].tolist()
 
-# --------------------------
-# PDF Text Extraction
-# --------------------------
 def extract_pdf_text(file_path):
     text = ""
     try:
@@ -43,9 +34,6 @@ def extract_pdf_text(file_path):
         print(f"❌ Error reading PDF {file_path}: {e}")
     return text
 
-# --------------------------
-# Chunking Function
-# --------------------------
 def simple_chunking(text, max_length=250):
     raw_chunks = [p.strip() for p in text.split('\n\n') if p.strip()]
     chunks = []
@@ -95,7 +83,7 @@ def build_vector_store(subject):
         return
 
     embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
-    embedding_function = HFEmbeddings(embedding_model)  # <-- CHANGED PORTION
+    embedding_function = HFEmbeddings(embedding_model)  
 
     persist_path = VECTOR_STORE_DIR / subject.lower()
     persist_path.mkdir(parents=True, exist_ok=True)
@@ -103,7 +91,7 @@ def build_vector_store(subject):
     print(f"🔄 Creating vector store with {len(docs)} chunks...")
     vector_store = Chroma(
         persist_directory=str(persist_path),
-        embedding_function=embedding_function  # <-- CHANGED PORTION
+        embedding_function=embedding_function  
     )
     vector_store.add_documents(docs)
     print(f"✅ Vector store created for subject: {subject}")

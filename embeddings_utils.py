@@ -1,33 +1,20 @@
-# embeddings_utils.py
-# For loading vector stores and embedding user queries during retrieval using Sentence Transformers
-
 import os
 import streamlit as st
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings.huggingface import HuggingFaceEmbeddings
 import torch
 
-
-# -----------------------------
-# Directories
-# -----------------------------
 SUBJECTS_DIR = "subjects"
 VECTOR_STORE_DIR = "vector_stores"
 
-# -----------------------------
-# Initialize embeddings
-# -----------------------------
 EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
-
-
 
 def get_embeddings():
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     return HuggingFaceEmbeddings(
         model_name=model_name,
-        model_kwargs={'device': 'cpu'}  # Force safe load
+        model_kwargs={'device': 'cpu'}  
     )
-
 
 def get_subjects():
     """Get list of available subjects"""
@@ -52,7 +39,6 @@ def load_subject_vector_store(subject):
         persist_directory=persist_path,
         embedding_function=embeddings
     )
-
 
 def search_subject(subject, query, k=5):
     """Search for relevant documents in a subject"""

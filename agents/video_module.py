@@ -1,4 +1,3 @@
-# video_module.py
 import os
 import tempfile
 import streamlit as st
@@ -15,14 +14,12 @@ def synthesize_video_from_text(prompt):
             return None, "❌ Empty prompt, cannot generate video."
 
         st.info("🎤 Generating audio from text...")
-        # Temp file for audio
         with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
             audio_path = f.name
         tts = gTTS(prompt, lang='en')
         tts.save(audio_path)
 
         st.info("📝 Creating video clip...")
-        # Text clip (lower resolution for cloud)
         txt_clip = TextClip(
             prompt,
             fontsize=30,
@@ -33,12 +30,10 @@ def synthesize_video_from_text(prompt):
             align='center'
         )
 
-        # Attach audio
         audio_clip = AudioFileClip(audio_path)
         txt_clip = txt_clip.set_duration(audio_clip.duration)
         txt_clip = txt_clip.set_audio(audio_clip)
 
-        # Temp file for video
         with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as f:
             video_path = f.name
 
