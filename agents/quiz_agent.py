@@ -12,6 +12,7 @@ class QuizAgent:
 You are a quiz generator.
 
 Using ONLY the explanation below, create exactly 5 multiple-choice questions.
+Don't try to repeat the same questions again, but if the context is small then no problem.
 Return the result STRICTLY in JSON format like this:
 
 [
@@ -68,9 +69,9 @@ def parse_quiz(quiz_text):
 
     quiz_text = quiz_text.strip()
     if quiz_text.startswith("```json"):
-        quiz_text = quiz_text[7:]
+        quiz_text = quiz_text[10:]
     elif quiz_text.startswith("```"):
-        quiz_text = quiz_text[3:]
+        quiz_text = quiz_text[5:]
     if quiz_text.endswith("```"):
         quiz_text = quiz_text[:-3]
     quiz_text = quiz_text.strip()

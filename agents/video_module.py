@@ -3,11 +3,12 @@ import tempfile
 import streamlit as st
 from moviepy.editor import TextClip, AudioFileClip
 from gtts import gTTS
+import numpy as np
 
 def synthesize_video_from_text(prompt):
     """
     Generate a video from text using moviepy + gTTS in a cloud-safe way.
-    All temporary files are created in /tmp or temporary file objects.
+    Works without ImageMagick dependency on Streamlit Cloud.
     """
     try:
         if not prompt.strip():
@@ -16,18 +17,17 @@ def synthesize_video_from_text(prompt):
         st.info("🎤 Generating audio from text...")
         with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
             audio_path = f.name
-        tts = gTTS(prompt, lang='en')
-        tts.save(audio_path)
+        gTTS(prompt, lang='en').save(audio_path)
 
-        st.info("📝 Creating video clip...")
+        st.info("📝 Creating video clip (using PIL backend)...")
+        # Explicitly force the caption method (no ImageMagick)
         txt_clip = TextClip(
             prompt,
             fontsize=30,
             color='white',
             size=(720, 480),
             bg_color='black',
-            method='caption',
-            align='center'
+            method='caption'
         )
 
         audio_clip = AudioFileClip(audio_path)
@@ -43,24 +43,25 @@ def synthesize_video_from_text(prompt):
             fps=24,
             codec='libx264',
             audio_codec='aac',
+            threads=4,          # safer for Streamlit Cloud
             logger=None
         )
 
-        # Clean up temp audio
+        # Cleanup
+        txt_clip.close()
+        audio_clip.close()
         if os.path.exists(audio_path):
             os.remove(audio_path)
 
         return video_path, None
 
     except Exception as e:
-        return None, f"❌ Video generation failed: {e}"
+        # Show full exception for debugging
+        return None, f"❌ Video generation failed: {str(e)}"
 
 
 def generate_video_from_text(text_prompt):
-    """
-    High-level function for Streamlit usage.
-    Returns video file path or error message.
-    """
+    """High-level function for Streamlit usage."""
     try:
         video_path, error = synthesize_video_from_text(text_prompt)
         if error:
